@@ -1,242 +1,242 @@
-# Taller 3: Análisis y Experimentación con Capas Convolucionales
+# Workshop 3: Analysis and Experimentation with Convolutional Layers
 
-## 📋 Contexto y Motivación
+## 📋 Context and Motivation
 
-En este curso, las redes neuronales no se tratan como cajas negras sino como **componentes arquitectónicos** cuyas decisiones de diseño afectan el rendimiento, la escalabilidad y la interpretabilidad.
+In this course, neural networks are not treated as black boxes but as **architectural components** whose design choices affect performance, scalability, and interpretability.
 
-Este taller se enfoca en **capas convolucionales** como un ejemplo concreto de cómo el sesgo inductivo se introduce en los sistemas de aprendizaje.
+This workshop focuses on **convolutional layers** as a concrete example of how inductive bias is introduced into learning systems.
 
-En lugar de seguir una receta, **seleccionarás, analizarás y experimentarás** con una arquitectura convolucional usando un dataset real.
-
----
-
-## 🎯 Objetivos de Aprendizaje
-
-Al completar este taller, deberías ser capaz de:
-
-1. **Entender** el rol y la intuición matemática detrás de las capas convolucionales
-2. **Analizar** cómo las decisiones arquitectónicas (kernel size, depth, stride, padding) afectan el aprendizaje
-3. **Comparar** capas convolucionales con capas completamente conectadas para datos tipo imagen
-4. **Realizar** un análisis exploratorio de datos (EDA) mínimo pero significativo para tareas de redes neuronales
-5. **Comunicar** decisiones arquitectónicas y experimentales de manera clara
+Rather than following a recipe, students will **select, analyze, and experiment** with a convolutional architecture using a real dataset.
 
 ---
 
-## 🗂️ Estructura del Proyecto
+## 🎯 Learning Objectives
+
+By completing this workshop, you should be able to:
+
+1. **Understand** the role and mathematical intuition behind convolutional layers
+2. **Analyze** how architectural decisions (kernel size, depth, stride, padding) affect learning
+3. **Compare** convolutional layers with fully connected layers for image-like data
+4. **Perform** a minimal but meaningful exploratory data analysis (EDA) for NN tasks
+5. **Communicate** architectural and experimental decisions clearly
+
+---
+
+## 🗂️ Project Structure
 
 ```
 Taller03/
-├── README.md                 # Este archivo
-├── data/                     # Datos del proyecto
-│   ├── raw/                 # Datos originales
-│   └── processed/           # Datos procesados
-├── notebooks/               # Notebooks de Jupyter para análisis
-│   ├── 01_eda.ipynb        # Análisis exploratorio de datos
-│   ├── 02_baseline.ipynb   # Modelo baseline (fully connected)
-│   └── 03_cnn.ipynb        # Modelo convolucional
-├── src/                     # Código fuente
-│   ├── models/             # Definiciones de modelos
-│   ├── utils/              # Funciones auxiliares
-│   └── training/           # Scripts de entrenamiento
-├── results/                 # Resultados y visualizaciones
-│   ├── figures/            # Gráficos y visualizaciones
-│   └── models/             # Modelos entrenados
-└── requirements.txt         # Dependencias del proyecto
+├── README.md                 # This file
+├── data/                     # Project data
+│   ├── raw/                 # Original data
+│   └── processed/           # Processed data
+├── notebooks/               # Jupyter notebooks for analysis
+│   ├── 01_eda.ipynb        # Exploratory data analysis
+│   ├── 02_baseline.ipynb   # Baseline model (fully connected)
+│   └── 03_cnn.ipynb        # Convolutional model
+├── src/                     # Source code
+│   ├── models/             # Model definitions
+│   ├── utils/              # Utility functions
+│   └── training/           # Training scripts
+├── results/                 # Results and visualizations
+│   ├── figures/            # Plots and visualizations
+│   └── models/             # Trained models
+└── requirements.txt         # Project dependencies
 ```
 
 ---
 
-## 🚀 Instalación y Configuración
+## 🚀 Installation and Setup
 
-### Requisitos Previos
+### Prerequisites
 
-- Python 3.8 o superior
-- pip o conda para gestión de paquetes
+- Python 3.8 or higher
+- pip or conda for package management
 
-### Instalación
+### Installation
 
 ```bash
-# Clonar el repositorio
+# Clone the repository
 git clone <repository-url>
 cd Taller03
 
-# Crear entorno virtual (opcional pero recomendado)
+# Create virtual environment (optional but recommended)
 python -m venv venv
-source venv/bin/activate  # En Windows: venv\Scripts\activate
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-# Instalar dependencias
+# Install dependencies
 pip install -r requirements.txt
 ```
 
-### Dependencias Principales
+### Main Dependencies
 
-- `torch` / `tensorflow` - Framework de deep learning
-- `numpy` - Operaciones numéricas
-- `pandas` - Manipulación de datos
-- `matplotlib` / `seaborn` - Visualización
-- `scikit-learn` - Métricas y preprocesamiento
-- `jupyter` - Notebooks interactivos
+- `torch` / `tensorflow` - Deep learning framework
+- `numpy` - Numerical operations
+- `pandas` - Data manipulation
+- `matplotlib` / `seaborn` - Visualization
+- `scikit-learn` - Metrics and preprocessing
+- `jupyter` - Interactive notebooks
 
 ---
 
 ## 📊 Dataset
 
-### Descripción
+### Description
 
-[Describe aquí el dataset que utilizarás: nombre, fuente, número de clases, tamaño de las imágenes, número de ejemplos, etc.]
+[Describe the dataset you will use: name, source, number of classes, image size, number of examples, etc.]
 
-### Preparación de Datos
+### Data Preparation
 
 ```bash
-# Descargar y preparar el dataset
+# Download and prepare the dataset
 python src/data/prepare_data.py
 ```
 
 ---
 
-## 🧪 Experimentación
+## 🧪 Experimentation
 
-### 1. Análisis Exploratorio de Datos (EDA)
+### 1. Exploratory Data Analysis (EDA)
 
-Antes de construir cualquier modelo, es crucial entender los datos:
+Before building any model, it's crucial to understand the data:
 
-- Distribución de clases
-- Dimensiones de las imágenes
-- Estadísticas de píxeles (media, desviación estándar)
-- Ejemplos de cada clase
-- Posibles desbalances o sesgos
+- Class distribution
+- Image dimensions
+- Pixel statistics (mean, standard deviation)
+- Examples from each class
+- Potential imbalances or biases
 
 **Notebook**: `notebooks/01_eda.ipynb`
 
-### 2. Modelo Baseline (Fully Connected)
+### 2. Baseline Model (Fully Connected)
 
-Implementación de una red neuronal completamente conectada como línea base:
+Implementation of a fully connected neural network as baseline:
 
-- Arquitectura simple: Input → Flatten → Dense Layers → Output
-- Sirve como punto de comparación
-- Analiza limitaciones para datos tipo imagen
+- Simple architecture: Input → Flatten → Dense Layers → Output
+- Serves as comparison point
+- Analyze limitations for image-like data
 
 **Notebook**: `notebooks/02_baseline.ipynb`
 
-### 3. Modelo Convolucional (CNN)
+### 3. Convolutional Model (CNN)
 
-Diseño y experimentación con capas convolucionales:
+Design and experimentation with convolutional layers:
 
-#### Parámetros a Experimentar:
+#### Parameters to Experiment With:
 
 - **Kernel Size**: 3x3, 5x5, 7x7
-- **Depth**: Número de capas convolucionales
-- **Stride**: 1, 2 (afecta el downsampling)
+- **Depth**: Number of convolutional layers
+- **Stride**: 1, 2 (affects downsampling)
 - **Padding**: 'same', 'valid'
 - **Pooling**: MaxPooling, AveragePooling
 - **Activation Functions**: ReLU, LeakyReLU, etc.
 
 **Notebook**: `notebooks/03_cnn.ipynb`
 
-### 4. Comparación de Resultados
+### 4. Results Comparison
 
-| Modelo | Parámetros | Accuracy | F1-Score | Tiempo Entrenamiento |
-|--------|-----------|----------|----------|---------------------|
+| Model | Parameters | Accuracy | F1-Score | Training Time |
+|--------|-----------|----------|----------|---------------|
 | Baseline FC | X | X% | X | X min |
 | CNN v1 | Y | Y% | Y | Y min |
 | CNN v2 | Z | Z% | Z | Z min |
 
 ---
 
-## 📈 Métricas de Evaluación
+## 📈 Evaluation Metrics
 
-- **Accuracy**: Precisión general del modelo
-- **Precision, Recall, F1-Score**: Métricas por clase
-- **Confusion Matrix**: Visualización de errores
-- **Training/Validation Loss**: Curvas de aprendizaje
-- **Número de Parámetros**: Complejidad del modelo
-- **Tiempo de Entrenamiento**: Eficiencia computacional
+- **Accuracy**: Overall model accuracy
+- **Precision, Recall, F1-Score**: Per-class metrics
+- **Confusion Matrix**: Error visualization
+- **Training/Validation Loss**: Learning curves
+- **Number of Parameters**: Model complexity
+- **Training Time**: Computational efficiency
 
 ---
 
-## 🧠 Conceptos Clave
+## 🧠 Key Concepts
 
-### ¿Por qué Capas Convolucionales?
+### Why Convolutional Layers?
 
-Las capas convolucionales introducen **sesgo inductivo** al asumir que:
+Convolutional layers introduce **inductive bias** by assuming:
 
-1. **Localidad**: Los píxeles cercanos están relacionados
-2. **Equivariancia Traslacional**: Un patrón es relevante sin importar su posición
-3. **Compartición de Parámetros**: Reduce drásticamente el número de parámetros
+1. **Locality**: Nearby pixels are related
+2. **Translation Equivariance**: A pattern is relevant regardless of its position
+3. **Parameter Sharing**: Dramatically reduces the number of parameters
 
-### Intuición Matemática
+### Mathematical Intuition
 
-Una capa convolucional aplica un filtro (kernel) sobre la imagen:
+A convolutional layer applies a filter (kernel) over the image:
 
 $$
 (I * K)(i, j) = \sum_m \sum_n I(i+m, j+n) \cdot K(m, n)
 $$
 
-Donde:
-- $I$ es la imagen de entrada
-- $K$ es el kernel/filtro
-- $*$ denota la operación de convolución
+Where:
+- $I$ is the input image
+- $K$ is the kernel/filter
+- $*$ denotes the convolution operation
 
 ---
 
-## 📝 Entregables
+## 📝 Deliverables
 
-### Documentación Requerida
+### Required Documentation
 
-1. **Notebooks con análisis completo**:
-   - EDA detallado con visualizaciones
-   - Implementación y justificación del modelo baseline
-   - Experimentación con arquitecturas convolucionales
-   - Comparación de resultados
+1. **Notebooks with complete analysis**:
+   - Detailed EDA with visualizations
+   - Baseline model implementation and justification
+   - Experimentation with convolutional architectures
+   - Results comparison
 
-2. **Reporte de decisiones arquitectónicas**:
-   - ¿Por qué elegiste ciertos valores de hiperparámetros?
-   - ¿Qué observaste al cambiar kernel size, depth, stride?
-   - ¿Cómo se compara la CNN con el baseline?
+2. **Architectural decisions report**:
+   - Why did you choose certain hyperparameter values?
+   - What did you observe when changing kernel size, depth, stride?
+   - How does the CNN compare with the baseline?
 
-3. **Visualizaciones**:
-   - Curvas de aprendizaje
-   - Matriz de confusión
-   - Ejemplos de predicciones correctas e incorrectas
-   - Visualización de filtros aprendidos (opcional)
-
----
-
-## 🔍 Preguntas Guía para el Análisis
-
-### Sobre la Arquitectura
-
-- ¿Cómo afecta el tamaño del kernel a los patrones que puede detectar la red?
-- ¿Qué sucede con la dimensión espacial a medida que aumenta la profundidad?
-- ¿Cuál es el trade-off entre profundidad y ancho de la red?
-
-### Sobre el Rendimiento
-
-- ¿Por qué la CNN supera (o no) al modelo fully connected?
-- ¿Dónde falla el modelo? ¿Hay clases que confunde sistemáticamente?
-- ¿El modelo está sobreajustando? ¿Cómo lo detectas?
-
-### Sobre la Eficiencia
-
-- ¿Cuántos parámetros tiene cada modelo?
-- ¿Cómo se relaciona el número de parámetros con el rendimiento?
-- ¿Vale la pena el costo computacional adicional?
+3. **Visualizations**:
+   - Learning curves
+   - Confusion matrix
+   - Examples of correct and incorrect predictions
+   - Visualization of learned filters (optional)
 
 ---
 
-## 🛠️ Uso
+## 🔍 Guiding Questions for Analysis
 
-### Entrenar un Modelo
+### About Architecture
+
+- How does kernel size affect the patterns the network can detect?
+- What happens to spatial dimensions as depth increases?
+- What is the trade-off between network depth and width?
+
+### About Performance
+
+- Why does the CNN outperform (or not) the fully connected model?
+- Where does the model fail? Are there classes it systematically confuses?
+- Is the model overfitting? How can you detect it?
+
+### About Efficiency
+
+- How many parameters does each model have?
+- How does the number of parameters relate to performance?
+- Is the additional computational cost worth it?
+
+---
+
+## 🛠️ Usage
+
+### Train a Model
 
 ```bash
-# Entrenar modelo baseline
+# Train baseline model
 python src/training/train_baseline.py --epochs 50 --batch_size 32
 
-# Entrenar modelo CNN
+# Train CNN model
 python src/training/train_cnn.py --epochs 50 --batch_size 32 --kernel_size 3
 ```
 
-### Evaluar un Modelo
+### Evaluate a Model
 
 ```bash
 python src/evaluation/evaluate.py --model_path results/models/best_cnn.pth
@@ -244,15 +244,15 @@ python src/evaluation/evaluate.py --model_path results/models/best_cnn.pth
 
 ---
 
-## 📚 Referencias y Recursos
+## 📚 References and Resources
 
-### Papers Fundamentales
+### Fundamental Papers
 
 - LeCun et al. (1998) - "Gradient-Based Learning Applied to Document Recognition"
 - Krizhevsky et al. (2012) - "ImageNet Classification with Deep CNNs (AlexNet)"
 - Simonyan & Zisserman (2014) - "Very Deep CNNs (VGGNet)"
 
-### Recursos Adicionales
+### Additional Resources
 
 - [CS231n: Convolutional Neural Networks for Visual Recognition](http://cs231n.stanford.edu/)
 - [Deep Learning Book - Chapter 9: Convolutional Networks](https://www.deeplearningbook.org/contents/convnets.html)
@@ -260,22 +260,22 @@ python src/evaluation/evaluate.py --model_path results/models/best_cnn.pth
 
 ---
 
-## 👥 Autor
+## 👥 Author
 
-[Tu nombre]
-
----
-
-## 📄 Licencia
-
-[Especifica la licencia si aplica]
+[Your name]
 
 ---
 
-## 🤝 Contribuciones
+## 📄 License
 
-Si tienes sugerencias o encuentras errores, no dudes en abrir un issue o pull request.
+[Specify license if applicable]
 
 ---
 
-**Última actualización**: Febrero 2026
+## 🤝 Contributions
+
+If you have suggestions or find errors, feel free to open an issue or pull request.
+
+---
+
+**Last updated**: February 2026
