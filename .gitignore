@@ -49,3 +49,5 @@ results/models/*.pt
 # OS
 .DS_Store
 Thumbs.db
+
+.venv

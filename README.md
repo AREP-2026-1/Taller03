@@ -83,14 +83,14 @@ pip install -r requirements.txt
 
 ### Description
 
-[Describe the dataset you will use: name, source, number of classes, image size, number of examples, etc.]
+**CIFAR-10** (Krizhevsky et al.):
+- 60,000 RGB images of 32x32
+- 10 balanced classes (50,000 train / 10,000 test)
+- Suitable for CNNs due to spatial structure and local patterns
 
 ### Data Preparation
 
-```bash
-# Download and prepare the dataset
-python src/data/prepare_data.py
-```
+The dataset is downloaded automatically from the notebooks using `get_cifar10_loaders`.
 
 ---
 
@@ -106,7 +106,12 @@ Before building any model, it's crucial to understand the data:
 - Examples from each class
 - Potential imbalances or biases
 
-**Notebook**: `notebooks/01_eda.ipynb`
+**Notebook**: [notebooks/01_eda.ipynb](notebooks/01_eda.ipynb)
+
+**Key results (EDA):**
+- Class distribution: balanced
+- Image size: 32x32x3
+- Pixel statistics: see tables and plots in the notebook
 
 ### 2. Baseline Model (Fully Connected)
 
@@ -116,7 +121,19 @@ Implementation of a fully connected neural network as baseline:
 - Serves as comparison point
 - Analyze limitations for image-like data
 
-**Notebook**: `notebooks/02_baseline.ipynb`
+**Notebook**: [notebooks/02_baseline.ipynb](notebooks/02_baseline.ipynb)
+
+**Architecture (summary):**
+```
+Input (3x32x32) -> Flatten (3072)
+   -> Dense(512) -> ReLU -> Dropout(0.2)
+   -> Dense(256) -> ReLU -> Dropout(0.2)
+   -> Dense(10)
+```
+
+**Key results (Baseline):**
+- Parameters: ~1,707,274
+- Accuracy/curves: see notebook outputs
 
 ### 3. Convolutional Model (CNN)
 
@@ -131,15 +148,31 @@ Design and experimentation with convolutional layers:
 - **Pooling**: MaxPooling, AveragePooling
 - **Activation Functions**: ReLU, LeakyReLU, etc.
 
-**Notebook**: `notebooks/03_cnn.ipynb`
+**Notebook**: [notebooks/03_cnn.ipynb](notebooks/03_cnn.ipynb)
+
+**Base architecture (simple diagram):**
+```
+Input (3x32x32)
+   -> Conv(32, 3x3) -> BN -> ReLU -> MaxPool(2x2)
+   -> Conv(64, 3x3) -> BN -> ReLU -> MaxPool(2x2)
+   -> Flatten (4096)
+   -> Dense(128) -> ReLU -> Dropout(0.5)
+   -> Dense(10)
+```
+
+**Key results (CNN base):**
+- Parameters: ~545,290
+- Accuracy/curves: see notebook outputs
 
 ### 4. Results Comparison
 
-| Model | Parameters | Accuracy | F1-Score | Training Time |
-|--------|-----------|----------|----------|---------------|
-| Baseline FC | X | X% | X | X min |
-| CNN v1 | Y | Y% | Y | Y min |
-| CNN v2 | Z | Z% | Z | Z min |
+| Model | Parameters | Accuracy | Notes |
+|--------|-----------|----------|---------------|
+| Baseline FC | ~1,707,274 | TBD | See baseline notebook |
+| CNN base | ~545,290 | TBD | Better parameter efficiency |
+| CNN (experiments) | Variable | TBD | Kernel, depth, pooling |
+
+Figures saved in [results/figures/](results/figures/)
 
 ---
 
@@ -245,6 +278,19 @@ python src/evaluation/evaluate.py --model_path results/models/best_cnn.pth
 ---
 
 ## 📚 References and Resources
+
+---
+
+## 🧠 Interpretation and Architectural Reasoning (In your own words)
+
+**1) Why did convolutional layers outperform (or not) the baseline?**
+CNNs exploit spatial structure: they detect local patterns (edges, textures) and reuse filters across the image. This reduces parameters, improves generalization, and learns feature hierarchies. The baseline flattens the image and loses spatial relationships, so it needs far more parameters to capture the same patterns.
+
+**2) What inductive bias does convolution introduce?**
+It introduces **locality** (nearby pixels are related) and **translation equivariance** (a pattern matters regardless of position). It also encourages **hierarchical** features from simple to complex.
+
+**3) In what types of problems would convolution NOT be appropriate?**
+In data without spatial structure (tabular), in tasks where absolute position is critical, or in irregular structures (graphs, point clouds). If global context or non-local relationships are needed, other models (transformers, GNNs) may fit better.
 
 ### Fundamental Papers
 
