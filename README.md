@@ -174,6 +174,16 @@ Input (3x32x32)
 
 Figures saved in [results/figures/](results/figures/)
 
+### Result Figures
+
+![Class Distribution](results/figures/class_distribution.png)
+![Sample Images per Class](results/figures/sample_images_per_class.png)
+![Baseline Training History](results/figures/baseline_training_history.png)
+![CNN Training History](results/figures/cnn_base_history.png)
+![Kernel Size Comparison](results/figures/kernel_size_comparison.png)
+![Baseline Confusion Matrix](results/figures/baseline_confusion_matrix.png)
+![CNN Confusion Matrix](results/figures/cnn_confusion_matrix.png)
+
 ---
 
 ## 📈 Evaluation Metrics
